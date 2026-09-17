@@ -1,26 +1,181 @@
 @import "tailwindcss";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/400-italic.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bg: hsl(var(--bg));
+  --color-surface: hsl(var(--surface));
+  --color-surface-raised: hsl(var(--surface-raised));
+  --color-border: hsl(var(--border));
+  --color-border-strong: hsl(var(--border-strong));
+  --color-ink: hsl(var(--ink));
+  --color-muted: hsl(var(--muted));
+  --color-faint: hsl(var(--faint));
+  --color-accent: hsl(var(--accent));
+  --color-accent-ink: hsl(var(--accent-ink));
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* ── Animations ── */
+  --animate-caret: caret 1s step-start infinite;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-marquee: marquee 28s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@keyframes caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
-@media (prefers-color-scheme: dark) {
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Paper — light mode */
+    --bg: 40 14% 96%;
+    --surface: 40 20% 99%;
+    --surface-raised: 0 0% 100%;
+    --border: 40 10% 88%;
+    --border-strong: 40 8% 78%;
+    --ink: 220 14% 9%;
+    --muted: 220 8% 38%;
+    --faint: 220 6% 55%;
+    --accent: 32 88% 42%;
+    --accent-ink: 40 20% 99%;
+  }
+
+  .dark {
+    /* Ink — dark mode, tuned like a phosphor terminal */
+    --bg: 220 14% 6%;
+    --surface: 220 13% 8%;
+    --surface-raised: 220 12% 10%;
+    --border: 220 10% 16%;
+    --border-strong: 220 9% 24%;
+    --ink: 40 20% 96%;
+    --muted: 220 8% 65%;
+    --faint: 220 7% 46%;
+    --accent: 38 95% 58%;
+    --accent-ink: 220 14% 6%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: hsl(var(--bg));
+    color: hsl(var(--ink));
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    cursor: none;
+  }
+
+  ::selection {
+    background-color: hsl(var(--accent) / 0.24);
+    color: hsl(var(--ink));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .container-edge {
+    @apply mx-auto w-full max-w-[1240px] px-6 md:px-10;
+  }
+
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* hide default cursor over hero */
+.cursor-none {
+  cursor: none !important;
+}
+
+/* ==========================================
+   HERO DOT GRID
+========================================== */
+
+.dot-grid-hero {
+  --dot-color: #faaf2e;
+  --dot-size: 1px;
+  --spacing: 12px;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight: 220px;
+
+  background-image:
+    radial-gradient(
+      circle,
+      var(--dot-color) var(--dot-size),
+      transparent calc(var(--dot-size) + 0.5px)
+    );
+
+  background-size:
+    var(--spacing)
+    var(--spacing);
+
+  -webkit-mask-image:
+    radial-gradient(
+      circle var(--spotlight)
+      at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 1) 30%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.45) 70%,
+      transparent 100%
+    );
+
+  mask-image:
+    radial-gradient(
+      circle var(--spotlight)
+      at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.45) 70%,
+      transparent 100%
+    );
 }
