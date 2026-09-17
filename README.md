@@ -1,4 +1,4 @@
-# Sam — Developer Portfolio
+# Sidhant— Developer Portfolio
 
 A premium personal developer portfolio built with Next.js (App Router), TypeScript, Tailwind CSS and Framer Motion.
 
